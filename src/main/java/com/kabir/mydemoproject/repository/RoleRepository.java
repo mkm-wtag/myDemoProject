@@ -1,5 +1,6 @@
 package com.kabir.mydemoproject.repository;
 
+
 import com.kabir.mydemoproject.models.ERole;
 import com.kabir.mydemoproject.models.Role;
 import org.springframework.data.jpa.repository.JpaRepository;

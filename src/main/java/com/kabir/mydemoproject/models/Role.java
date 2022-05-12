@@ -1,7 +1,6 @@
 package com.kabir.mydemoproject.models;
 
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -10,8 +9,7 @@ import javax.persistence.*;
 public class Role {
 
     @Id
-    @GenericGenerator(name = "sequence_id", strategy = "com.kabir.mydemoproject.utility.MyGenerator")
-    @GeneratedValue(generator = "sequence_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
