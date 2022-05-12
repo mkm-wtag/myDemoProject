@@ -49,4 +49,9 @@ public class AllExceptionHandlers {
         return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(exception.getErrorMessage());
     }
 
+    @ExceptionHandler(SeatAlreadyBookedException.class)
+    public ResponseEntity<ErrorMessage> handleSealAlreadyBookedException(SeatAlreadyBookedException exception){
+        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(exception.getErrorMessage());
+    }
+
 }
