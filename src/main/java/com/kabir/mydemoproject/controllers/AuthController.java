@@ -21,7 +21,7 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<User> registerUser(@Valid @RequestBody UserDto userDto) {
         User user = userService.saveUser(userDto);
         return ResponseEntity.ok(user);
@@ -29,9 +29,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-
         JwtResponse jwtResponse = userService.login(loginRequest);
         return ResponseEntity.ok(jwtResponse);
     }
-
 }
