@@ -12,6 +12,7 @@ import com.kabir.mydemoproject.repository.UserRepository;
 import com.kabir.mydemoproject.security.jwt.JwtUtils;
 import com.kabir.mydemoproject.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,9 +20,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.Valid;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,6 +71,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User getUser(Long id) {
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        Long idFromJwt= Long.parseLong(String.valueOf(authentication.getPrincipal()));
+        if(!idFromJwt.equals(id)){
+            throw new AccessDeniedException("You are not supposed to do this.");
+        }
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             return optionalUser.get();
@@ -111,12 +115,23 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public MyResponse deleteUser(Long id) {
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        Long idFromJwt= Long.parseLong(String.valueOf(authentication.getPrincipal()));
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(!idFromJwt.equals(id)||!optionalUser.isPresent()){
+            throw new AccessDeniedException("You are not supposed to do this.");
+        }
         userRepository.deleteById(id);
         return new MyResponse("Successfully deleted user");
     }
 
     @Override
     public User updateUser(Long id,Password password) {
+        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+        Long idFromJwt= Long.parseLong(String.valueOf(authentication.getPrincipal()));
+        if(!idFromJwt.equals(id)){
+            throw new AccessDeniedException("You are not supposed to do this.");
+        }
         Optional<User> optionalUser = userRepository.findById(id);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();

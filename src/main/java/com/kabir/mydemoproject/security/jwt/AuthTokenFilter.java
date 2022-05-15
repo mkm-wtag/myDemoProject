@@ -34,9 +34,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         try {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String username = jwtUtils.getUsernameFromJwtToken(jwt);
-                Claims claims= jwtUtils.extractAllClaims(jwt);
-
+                String userId = jwtUtils.getUserIdFromJwtToken(jwt);
+                Claims claims = jwtUtils.extractAllClaims(jwt);
 
                 Collection<? extends GrantedAuthority> authorities
                         = Arrays.stream(claims.get("Roles").toString().split(","))
@@ -44,7 +43,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                         .collect(Collectors.toList());
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
-                                username,
+                                userId,
                                 null,
                                 authorities);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

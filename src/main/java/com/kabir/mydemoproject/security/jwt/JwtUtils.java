@@ -33,14 +33,14 @@ public class JwtUtils {
         int jwtExpirationMs = 86400 * 1000;
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject((userPrincipal.getUsername()))
+                .setSubject(String.valueOf((userPrincipal.getId())))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
-    public String getUsernameFromJwtToken(String token) {
+    public String getUserIdFromJwtToken(String token) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
 

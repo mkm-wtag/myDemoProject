@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/seats")
-@PreAuthorize("hasRole('USER')")
+@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 public class SeatController {
 
     @Autowired
