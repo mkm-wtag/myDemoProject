@@ -2,6 +2,7 @@ package com.kabir.mydemoproject.service;
 
 
 import com.kabir.mydemoproject.dto.*;
+import com.kabir.mydemoproject.models.Seat;
 import com.kabir.mydemoproject.models.User;
 
 import java.util.List;
@@ -29,4 +30,8 @@ public interface UserService {
     User updateUser(Long id, Password password);
 
     JwtResponse login(LoginRequest loginRequest);
+
+    List<Seat> createHall(int numberOfSeats);
+
+    MyResponse makeAdmin(Long id);
 }
