@@ -2,6 +2,7 @@ package com.kabir.mydemoproject.controllers;
 
 import com.kabir.mydemoproject.dto.MyResponse;
 import com.kabir.mydemoproject.dto.Password;
+import com.kabir.mydemoproject.dto.UserDto;
 import com.kabir.mydemoproject.models.Seat;
 import com.kabir.mydemoproject.models.User;
 import com.kabir.mydemoproject.service.UserService;
@@ -21,6 +22,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @PostMapping
+    public ResponseEntity<User> registerUser(@Valid @RequestBody UserDto userDto) {
+        User user = userService.saveUser(userDto);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -50,7 +56,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("{userId}/make-admin")
+    @PatchMapping("{userId}/roles")
     public ResponseEntity<MyResponse> makeAdmin(@PathVariable("userId") Long id) {
         return ResponseEntity.ok(userService.makeAdmin(id));
     }

@@ -1,4 +1,4 @@
-package com.kabir.demoproject;
+package com.kabir.mydemoproject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

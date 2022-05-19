@@ -15,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-public class User {
+public class   User {
 
     @Id
     @GenericGenerator(name = "sequence_id", strategy = "com.kabir.mydemoproject.utility.MyGenerator")

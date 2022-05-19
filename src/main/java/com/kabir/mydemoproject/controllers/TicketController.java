@@ -19,8 +19,8 @@ public class TicketController {
     private TicketService ticketService;
 
     @PostMapping
-    public Ticket bookTicket(@PathVariable("userId") Long id, @Valid @RequestBody Ticket ticket) {
-        return ticketService.create(id, ticket);
+    public ResponseEntity<Ticket> bookTicket(@PathVariable("userId") Long id, @Valid @RequestBody Ticket ticket) {
+        return new ResponseEntity<>(ticketService.create(id, ticket),HttpStatus.CREATED);
     }
 
     @GetMapping

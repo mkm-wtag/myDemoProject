@@ -4,18 +4,30 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class AllExceptionHandlers {
 
 
-    @ExceptionHandler(InvalidRequestBodyException.class)
-    public ResponseEntity<ErrorMessage> handleInvalidRequestBodyException(InvalidRequestBodyException exception) {
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorMessage> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         ErrorMessage errorMessage = new ErrorMessage();
-        errorMessage.setMessage(exception.getBindingResult().getFieldError().getField() + " "
-                + exception.getBindingResult().getFieldError().getDefaultMessage());
+
+        exception.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String message = error.getDefaultMessage();
+            errorMessage.setMessage(fieldName + " "+message);
+        });
+
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorMessage);
     }
 
@@ -24,8 +36,7 @@ public class AllExceptionHandlers {
     public ResponseEntity<ErrorMessage> handleDataIntegrityViolationException(DataIntegrityViolationException exception) {
 
         ErrorMessage errorMessage = new ErrorMessage();
-        errorMessage.setMessage("User with given email already exists");
-
+        errorMessage.setMessage(exception.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessage);
     }
 
@@ -33,11 +44,6 @@ public class AllExceptionHandlers {
     @ExceptionHandler(CustomerLoginException.class)
     public ResponseEntity<ErrorMessage> handleCustomerLoginException(CustomerLoginException exception) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exception.getErrorMessage());
-    }
-
-    @ExceptionHandler(CustomerLogoutException.class)
-    public ResponseEntity<ErrorMessage> handleCustomerLogoutException(CustomerLogoutException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getErrorMessage());
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)

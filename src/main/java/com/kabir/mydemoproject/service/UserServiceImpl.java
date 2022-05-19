@@ -1,7 +1,6 @@
 package com.kabir.mydemoproject.service;
 
 import com.kabir.mydemoproject.dto.*;
-import com.kabir.mydemoproject.exception.CustomerLoginException;
 import com.kabir.mydemoproject.exception.ErrorMessage;
 import com.kabir.mydemoproject.exception.ResourceNotFoundException;
 import com.kabir.mydemoproject.models.ERole;
@@ -12,6 +11,7 @@ import com.kabir.mydemoproject.repository.RoleRepository;
 import com.kabir.mydemoproject.repository.UserRepository;
 import com.kabir.mydemoproject.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -97,10 +97,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User saveUser(UserDto userDto) {
         if (userRepository.existsByEmail(userDto.getEmail())) {
-            throw new CustomerLoginException(new ErrorMessage("Email Already used"));
+            throw new DataIntegrityViolationException("Email Already used");
         }
         if (userRepository.existsByUsername(userDto.getUsername())) {
-            throw new CustomerLoginException(new ErrorMessage("Username already exists"));
+            throw new DataIntegrityViolationException("Username already exists");
         }
         User user = new User();
         user.setUsername(userDto.getUsername());

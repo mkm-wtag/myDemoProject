@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
@@ -13,5 +14,6 @@ import javax.validation.constraints.NotBlank;
 public class Password {
 
     @NotBlank
+    @Size(min = 6, max = 40)
     private String userPassword;
 }
