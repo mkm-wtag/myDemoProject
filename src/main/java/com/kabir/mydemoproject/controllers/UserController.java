@@ -34,20 +34,24 @@ public class UserController {
         return ResponseEntity.ok(userService.getUsers());
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("{userId}")
     public ResponseEntity<User> getUser(@PathVariable("userId") Long id) {
         return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @PatchMapping("{userId}")
     public ResponseEntity<User> changePassword(@PathVariable("userId") Long id, @Valid @RequestBody Password password) {
         return new ResponseEntity<>(userService.updateUser(id, password), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @DeleteMapping("{userId}")
     public ResponseEntity<MyResponse> deleteUser(@PathVariable("userId") Long id) {
         return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
     }
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create-hall/{numberOfSeats}")
