@@ -54,12 +54,6 @@ public class UserController {
 
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/create-hall/{numberOfSeats}")
-    public ResponseEntity<List<Seat>> createHall(@PathVariable("numberOfSeats") int numberOfSeats) {
-        return ResponseEntity.ok(userService.createHall(numberOfSeats));
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("{userId}/roles")
     public ResponseEntity<MyResponse> makeAdmin(@PathVariable("userId") Long id) {
         return ResponseEntity.ok(userService.makeAdmin(id));
