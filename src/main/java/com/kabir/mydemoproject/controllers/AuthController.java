@@ -25,5 +25,4 @@ public class AuthController {
         JwtResponse jwtResponse = userService.login(loginRequest);
         return new ResponseEntity<>(jwtResponse, HttpStatus.OK);
     }
-
 }

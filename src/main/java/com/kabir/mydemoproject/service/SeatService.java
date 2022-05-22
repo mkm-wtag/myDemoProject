@@ -13,4 +13,6 @@ public interface SeatService {
     MyResponse update(Long id);
 
     Seat getSeat(Long id);
+
+    List<Seat> makeAllSeatsAvailable();
 }

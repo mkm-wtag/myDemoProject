@@ -1,8 +1,6 @@
 package com.kabir.mydemoproject.controllers;
 
-import com.kabir.mydemoproject.dto.MyResponse;
-import com.kabir.mydemoproject.dto.Password;
-import com.kabir.mydemoproject.dto.UserDto;
+import com.kabir.mydemoproject.dto.*;
 import com.kabir.mydemoproject.models.Seat;
 import com.kabir.mydemoproject.models.User;
 import com.kabir.mydemoproject.service.UserService;
@@ -28,25 +26,27 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
+
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.getUsers());
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @GetMapping("{userId}")
     public ResponseEntity<User> getUser(@PathVariable("userId") Long id) {
         return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PatchMapping("{userId}")
     public ResponseEntity<User> changePassword(@PathVariable("userId") Long id, @Valid @RequestBody Password password) {
         return new ResponseEntity<>(userService.updateUser(id, password), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
     @DeleteMapping("{userId}")
     public ResponseEntity<MyResponse> deleteUser(@PathVariable("userId") Long id) {
         return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
@@ -58,5 +58,6 @@ public class UserController {
     public ResponseEntity<MyResponse> makeAdmin(@PathVariable("userId") Long id) {
         return ResponseEntity.ok(userService.makeAdmin(id));
     }
+
 
 }

@@ -63,4 +63,16 @@ public class SeatServiceImpl implements SeatService {
             throw new ResourceNotFoundException(new ErrorMessage("Not Seat found with id "+id));
         }
     }
+
+    @Override
+    public List<Seat> makeAllSeatsAvailable() {
+        Iterable<Seat> seatList=seatRepository.findAll();
+        for(Seat seat:seatList){
+            seat.setBooked(false);
+        }
+        seatRepository.saveAll(seatList);
+        List<Seat> seats = new ArrayList<>();
+        seatRepository.findAll().forEach(seats::add);
+        return seats;
+    }
 }

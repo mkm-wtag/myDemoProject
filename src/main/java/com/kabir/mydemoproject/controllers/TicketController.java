@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/users/{userId}/tickets")
-@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+@PreAuthorize("hasAnyRole('USER','ADMIN')")
 public class TicketController {
 
     @Autowired
